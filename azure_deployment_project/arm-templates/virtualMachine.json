@@ -1,0 +1,106 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualMachineName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the virtual machine"
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "eastus",
+            "metadata": {
+                "description": "Location for the virtual machine"
+            }
+        },
+        "virtualMachineSize": {
+            "type": "string",
+            "defaultValue": "Standard_A0",
+            "metadata": {
+                "description": "Size of the virtual machine"
+            }
+        },
+        "adminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "Admin username for the virtual machine"
+            }
+        },
+        "adminPassword": {
+            "type": "securestring",
+            "minLength": 12,
+            "metadata": {
+                "description": "Admin password for the virtual machine"
+            }
+        }
+    },
+    "resources": [{
+        "type": "Microsoft.Compute/virtualMachines",
+        "apiVersion": "2023-09-01",
+        "name": "[parameters('virtualMachineName')]",
+        "location": "[parameters('location')]",
+        "properties":
+                    {
+                        "hardwareProfile": {
+                            "vmSize": "[parameters('virtualMachineSize')]"
+                        },
+                        "osProfile": {
+                            "computerName": "[parameters('virtualMachineName')]",
+                            "adminUsername": "[parameters('adminUsername')]",
+                            "adminPassword": "[parameters('adminPassword')]"
+                        },
+                        "storageProfile": {
+                            "imageReference": {
+                            "publisher": "Canonical",
+                                "offer": "UbuntuServer",
+                                "sku": "18.04-LTS",
+                                "version": "latest"
+                            },
+                            "osDisk": {
+                                "createOption": "FromImage",
+                                "managedDisk": {
+                                        "storageAccountType": "Standard_LRS"
+                                        }
+                            }
+                        },
+                        "networkProfile": {
+                            "networkInterfaces": [{
+                                "id": "[resourceId('Microsoft.Network/networkInterfaces', 'myNetworkInterface')]"
+                            }]
+                        }
+                    }
+    },
+    {
+    "type": "Microsoft.Network/networkInterfaces",
+    "apiVersion": "2022-07-01",
+    "name": "myNetworkInterface",
+    "location": "[parameters('location')]",
+    "properties": {
+        "ipConfigurations": [
+        {
+            "name": "ipconfig1",
+            "properties": {
+            "privateIPAllocationMethod": "Dynamic",
+            "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'mySimplePublicIP')]"
+            }
+            }
+        }
+        ]
+    }
+    },
+    {
+    "type": "Microsoft.Network/publicIPAddresses",
+    "apiVersion": "2022-07-01",
+    "name": "mySimplePublicIP",
+    "location": "[parameters('location')]",
+    "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+    }
+    }
+    
+    
+    ]
+}
