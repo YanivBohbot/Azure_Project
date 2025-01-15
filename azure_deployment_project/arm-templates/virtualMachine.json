@@ -7,20 +7,13 @@
       "metadata": {
         "description": "Name of the virtual machine."
       },
-      "defaultValue": "myVM"
+      "defaultValue": "myLinuxVM"
     },
     "location": {
       "type": "string",
       "defaultValue": "East US",
       "metadata": {
         "description": "Location for the resources."
-      }
-    },
-    "vmSize": {
-      "type": "string",
-      "defaultValue": "Standard_DS1_v2",
-      "metadata": {
-        "description": "The size of the virtual machine."
       }
     },
     "adminUsername": {
@@ -44,13 +37,13 @@
       "name": "[parameters('vmName')]",
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[parameters('vmSize')]"
+          "vmSize": "Standard_DS1_v2"
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "2019-Datacenter",
+            "publisher": "Canonical",
+            "offer": "UbuntuServer",
+            "sku": "18.04-LTS",
             "version": "latest"
           },
           "osDisk": {
@@ -76,47 +69,6 @@
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), '-nic'))]"
       ]
-    },
-    {
-      "type": "Microsoft.Network/networkInterfaces",
-      "apiVersion": "2021-05-01",
-      "name": "[concat(parameters('vmName'), '-nic')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', concat(parameters('vmName'), '-vnet'), 'default')]"
-              },
-              "privateIPAllocationMethod": "Dynamic"
-            }
-          }
-        ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', concat(parameters('vmName'), '-vnet'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2021-05-01",
-      "name": "[concat(parameters('vmName'), '-vnet')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": ["10.0.0.0/16"]
-        },
-        "subnets": [
-          {
-            "name": "default",
-            "properties": {
-              "addressPrefix": "10.0.0.0/24"
-            }
-          }
-        ]
-      }
     }
   ]
 }
