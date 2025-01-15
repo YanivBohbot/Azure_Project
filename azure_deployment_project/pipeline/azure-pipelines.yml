@@ -1,0 +1,42 @@
+trigger:
+  branches:
+    include:
+      - main  # Trigger pipeline on commits to the main branch
+
+pool:
+  name: Default
+  demands:
+    - agent.name -equals SelfHosted  # Use the self-hosted agent
+
+stages:
+  - stage: DeployResources
+    displayName: Deploy Azure Resources
+    jobs:
+      - job: DeployInfrastructure
+        displayName: Deploy Storage Accounts and VM
+        steps:
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy Storage Accounts
+            inputs:
+              azureResourceManagerConnection: '<Service Connection Name>'  # Replace with the Azure DevOps service connection name
+              subscriptionId: 'bbe586c3-363a-4dc7-9f08-3ee4a898c1f4'  
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: 'yanivB-ressourcegroup' 
+              location: 'eastus'
+              templateLocation: 'Linked artifact'
+              csmFile: 'storageAccount.json'
+              csmParametersFile: 'storageAccounts.parameters.json'
+              deploymentMode: 'Incremental'
+
+          - task: AzureResourceManagerTemplateDeployment@3
+            displayName: Deploy Virtual Machine
+            inputs:
+              azureResourceManagerConnection: '<Service Connection Name>' # Replace with the Azure DevOps service connection name
+              subscriptionId: 'bbe586c3-363a-4dc7-9f08-3ee4a898c1f4'
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: 'yanivB-ressourcegroup'
+              location: 'eastus'
+              templateLocation: 'Linked artifact'
+              csmFile: 'virtualMachine.json'
+              csmParametersFile: 'vmTemplate.parameters.json'
+              deploymentMode: 'Incremental'
