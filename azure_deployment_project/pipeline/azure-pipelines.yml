@@ -22,3 +22,14 @@ steps:
     resourceGroupName: 'yaniv-assignement'
     location: 'East US'
     csmFile: '$(System.DefaultWorkingDirectory)/virtualMachine.json'
+  
+- task: AzureFileCopy@4
+  inputs:
+    SourcePath: '$(Build.SourcesDirectory)/blob_operations.py'
+    azureSubscription: 'Your-Azure-Connection'
+    Destination: 'AzureVMs'
+    storage: 'YourStorageAccount'
+    resourceGroup: 'YourResourceGroup'
+    vmsAdminUserName: 'adminuser'
+    vmsAdminPassword: '$(vmPassword)'
+    TargetPath: '/home/adminuser/blob_operations.py'
