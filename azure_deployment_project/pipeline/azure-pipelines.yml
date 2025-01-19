@@ -28,8 +28,16 @@ steps:
     SourcePath: '$(Build.SourcesDirectory)/blob_operations.py'
     azureSubscription: 'Your-Azure-Connection'
     Destination: 'AzureVMs'
-    storage: 'YourStorageAccount'
-    resourceGroup: 'YourResourceGroup'
+    storage: 'stmyfirststorage'
+    resourceGroup: 'yaniv-assignement'
     vmsAdminUserName: 'adminuser'
     vmsAdminPassword: '$(vmPassword)'
-    TargetPath: '/home/adminuser/blob_operations.py'
+    TargetPath: '$(System.DefaultWorkingDirectory)/blob_operations.py'
+
+- task: AzureVmssDeployment@0
+  inputs:
+    azureSubscription: 'Your-Azure-Connection'
+    action: 'RunCommand'
+    vmssName: 'myVM'
+    resourceGroupName: 'yaniv-assignement'
+    runCommand: 'python $(System.DefaultWorkingDirectory)/blob_operations.py'
