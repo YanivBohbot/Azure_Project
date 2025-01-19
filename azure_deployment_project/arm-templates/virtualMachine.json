@@ -2,7 +2,7 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vmName": {
+    "virtualmachineName": {
       "type": "string",
       "metadata": {
         "description": "Name of the virtual machine."
@@ -60,7 +60,7 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2021-04-01",
       "location": "[parameters('location')]",
-      "name": "[parameters('vmName')]",
+      "name": "[parameters('virtualmachineName')]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "Standard_DS1_v2"
@@ -80,20 +80,20 @@
           }
         },
         "osProfile": {
-          "computerName": "[parameters('vmName')]",
+          "computerName": "[parameters('virtualmachineName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), '-nic'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('virtualmachineName'), '-nic'))]"
             }
           ]
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('vmName'), '-nic'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('virtualmachineName'), '-nic'))]"
       ]
     },
     {
