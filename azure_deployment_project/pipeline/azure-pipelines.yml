@@ -10,7 +10,7 @@ steps:
     deploymentScope: 'Resource Group'
     azureResourceManagerConnection: 'YourServiceConnection'
     subscriptionId: 'bbe586c3-363a-4dc7-9f08-3ee4a898c1f4'
-    resourceGroupName: 'YourResourceGroup'
+    resourceGroupName: 'yaniv-assignement'
     location: 'East US'
     csmFile: '$(System.DefaultWorkingDirectory)/storageAccount.json'
 
@@ -19,6 +19,6 @@ steps:
     deploymentScope: 'Resource Group'
     azureResourceManagerConnection: 'YourServiceConnection'
     subscriptionId: 'bbe586c3-363a-4dc7-9f08-3ee4a898c1f4'
-    resourceGroupName: 'YourResourceGroup'
+    resourceGroupName: 'yaniv-assignement'
     location: 'East US'
     csmFile: '$(System.DefaultWorkingDirectory)/virtualMachine.json'
