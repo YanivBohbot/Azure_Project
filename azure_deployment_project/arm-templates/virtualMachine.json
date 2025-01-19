@@ -93,7 +93,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', concat(parameters('virtualmachineName'), '-nic'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces',parameters('networkInterfaceName') )]"
       ]
     },
     {
