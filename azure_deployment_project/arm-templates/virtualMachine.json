@@ -82,17 +82,24 @@
       "apiVersion": "2021-02-01",
       "name": "[concat(parameters('virtualmachineName'), '-nic')]",
       "location": "[parameters('location')]",
+       "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpName'))]"
+       ],
       "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'myVNet', 'default')]"
-              },
-              "privateIPAllocationMethod": "Dynamic"
+      "ipConfigurations": [
+        {
+          "name": "ipconfig1",
+          "properties": {
+            "subnet": {
+              "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+            },
+            "privateIPAllocationMethod": "Dynamic",
+            "publicIPAddress": {
+              "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpName'))]"
             }
           }
+        }
         ]
       }
     },
